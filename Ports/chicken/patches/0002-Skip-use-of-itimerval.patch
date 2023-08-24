@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Paul Irwin <paulirwin@gmail.com>
+Date: Tue, 22 Aug 2023 13:13:34 -0600
+Subject: [PATCH] Skip use of itimerval
+
+---
+ runtime.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/runtime.c b/runtime.c
+index c46cde6f6bb8f2e8418b947760cfd768297bb555..5699402e05fbd77ed3958e567975329f066fc65c 100644
+--- a/runtime.c
++++ b/runtime.c
+@@ -4342,7 +4342,7 @@ static void set_profile_timer(C_uword freq)
+     if (!CreateTimerQueueTimer(&timer, NULL, win_timer, NULL, 0, freq/1000, 0))
+       goto error;
+   }
+-#else
++#elif !defined(__serenity__)
+   struct itimerval itv;
+ 
+   itv.it_value.tv_sec = freq / 1000000;

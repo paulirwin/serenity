@@ -1,0 +1,21 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Paul Irwin <paulirwin@gmail.com>
+Date: Tue, 22 Aug 2023 13:15:36 -0600
+Subject: [PATCH] Define SEARCH_EXE_PATH
+
+---
+ Makefile.serenity | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Makefile.serenity b/Makefile.serenity
+index 244eaa17d29af6d7d1cd48db7611d3e431def34e..ba2911d1a5feec3f641b50b09e3adb4b82e05cfe 100644
+--- a/Makefile.serenity
++++ b/Makefile.serenity
+@@ -88,6 +88,7 @@ chicken-config.h: chicken-defaults.h
+ 	echo "#define HAVE_ERRNO_H 1" >>$@
+ 	echo "#define C_STACK_GROWS_DOWNWARD 1" >>$@
+ 	echo "#define SIGIO 0" >>$@
++	echo "#define SEARCH_EXE_PATH 1" >>$@
+ ifdef GCHOOKS
+ 	echo "#define C_GC_HOOKS" >>$@
+ endif

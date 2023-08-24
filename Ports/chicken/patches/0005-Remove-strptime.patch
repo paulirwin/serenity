@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Paul Irwin <paulirwin@gmail.com>
+Date: Tue, 22 Aug 2023 13:35:27 -0600
+Subject: [PATCH] Remove strptime
+
+---
+ posixunix.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/posixunix.c b/posixunix.c
+index 07e6207ec2218d8ef41333aa4d7922c9619a42ca..4f724c6a37456fb82c38313330921c385ed063cd 100644
+--- a/posixunix.c
++++ b/posixunix.c
+@@ -313,8 +313,10 @@ static time_t C_timegm(struct tm *t)
+ 
+ #define C_a_timegm(ptr, c, v, tm)  C_int64_to_num(ptr, C_timegm(C_tm_set((v), C_data_pointer(tm))))
+ 
+-#ifdef __linux__
++#if defined(__linux__)
++#if !defined(__serenity__)
+ extern char *strptime(const char *s, const char *format, struct tm *tm);
++#endif
+ extern pid_t getpgid(pid_t pid);
+ #endif
+ 
+@@ -346,8 +348,13 @@ C_tm_get( C_word v, void *tm )
+   return v;
+ }
+ 
++// HACK: this probably will cause bugs
++#if !defined(__serenity__)
+ #define C_strptime(s, f, v, stm) \
+         (strptime(C_c_string(s), C_c_string(f), ((struct tm *)(stm))) ? C_tm_get((v), (stm)) : C_SCHEME_FALSE)
++#else
++#define C_strptime(s, f, v, stm) C_SCHEME_FALSE
++#endif
+ 
+ static int set_file_mtime(char *filename, C_word atime, C_word mtime)
+ {
